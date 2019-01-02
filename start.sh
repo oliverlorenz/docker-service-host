@@ -2,7 +2,7 @@
 BASEPATH=.
 
 echo "generate list of container names out of compose file:"
-sed '/^volumes/q' docker-compose.yml | grep -Eo "^  [a-z-]+" | awk '{$1=$1;print}' | sort > ${BASEPATH}/compose.list
+sed '/^volumes/q' docker-compose.yml | grep -Eo "^  [.a-z-]+" | awk '{$1=$1;print}' | sort > ${BASEPATH}/compose.list
 cat ${BASEPATH}/compose.list
 
 echo "generate list of running containers:"
