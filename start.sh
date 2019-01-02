@@ -15,13 +15,14 @@ cd /data
 
 echo "stop/rm containers not in docker-compose:"
 for CONTAINER in $CONTAINERS_TO_STOP; do
+    echo "docker rm -f $CONTAINER"
     docker rm -f $CONTAINER
 done
 
 echo "start containers not running:"
 # diff compose.list running.list
 for CONTAINER in $CONTAINERS_TO_START; do
-    echo "start: $CONTAINER"
+    echo "docker-compose up -d $CONTAINER"
     docker-compose up -d $CONTAINER
 done
 
