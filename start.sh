@@ -8,9 +8,8 @@ cat ${BASEPATH}/compose.list
 echo "generate list of running containers:"
 docker ps --format '{{.Names}}' | sort > ${BASEPATH}/running.list
 cat ${BASEPATH}/running.list
-
-CONTAINERS_TO_STOP=$(diff compose.list running.list | grep ">" | cut -d ' ' -f 2)
-CONTAINERS_TO_START=$(diff compose.list running.list | grep "<" | cut -d ' ' -f 2)
+CONTAINERS_TO_STOP=$(diff compose.list running.list | grep -E "^[->]" | grep -v "\.list$" | grep -Eo "^[-><+]?[.a-z]+$" | cut -c 2-)
+CONTAINERS_TO_START=$(diff compose.list running.list | grep -E "^[+<]" | grep -v "\.list$" | grep -Eo "^[-><+]?[.a-z]+$" | cut -d ' ' -f 2)
 
 cd /data
 
@@ -20,7 +19,9 @@ for CONTAINER in $CONTAINERS_TO_STOP; do
 done
 
 echo "start containers not running:"
+# diff compose.list running.list
 for CONTAINER in $CONTAINERS_TO_START; do
+    echo "start: $CONTAINER"
     docker-compose up -d $CONTAINER
 done
 
