@@ -12,6 +12,8 @@ cat ${BASEPATH}/running.list
 CONTAINERS_TO_STOP=$(diff compose.list running.list | grep ">" | cut -d ' ' -f 2)
 CONTAINERS_TO_START=$(diff compose.list running.list | grep "<" | cut -d ' ' -f 2)
 
+cd /data
+
 echo "stop/rm containers not in docker-compose:"
 for CONTAINER in $CONTAINERS_TO_STOP; do
     docker rm -f $CONTAINER
